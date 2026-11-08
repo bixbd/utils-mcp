@@ -12,7 +12,7 @@ const clean = (): ConnectorFolder => ({
 describe("renderConnector", () => {
   test("renders the standard files with the right names", () => {
     const files = renderConnector("acme-portal");
-    expect(Object.keys(files).sort()).toEqual([
+    expect(Object.keys(files).toSorted()).toEqual([
       "README.md",
       "fixtures/.gitkeep",
       "package.json",

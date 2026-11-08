@@ -122,6 +122,7 @@ describe("formLogin", () => {
   const secrets = { ACME_USER: "user", ACME_PASS: "hunter2-secret" };
 
   /** Portal with CSRF cookie, a login that checks header and body, and cookie-protected data. */
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const portalWith = (options: { rejectLogin?: boolean; expireFirstData?: boolean; alwaysExpire?: boolean } = {}) => {
     let authed = false;
     let expireNext = options.expireFirstData ?? false;

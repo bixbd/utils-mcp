@@ -3,8 +3,8 @@ import type { Connector } from "@bixbd/utils-mcp-core";
 const ID = /^[a-z][a-z0-9-]*$/;
 const TOOL = /^[a-z]+(_[a-z0-9]+)+$/;
 const SEMVER = /^\d+\.\d+\.\d+$/;
-const STATUSES = ["active", "beta", "broken", "deprecated"];
-const METHODS = ["none", "apikey", "bearer", "form-login", "cookie-import"];
+const STATUSES = new Set(["active", "beta", "broken", "deprecated"]);
+const METHODS = new Set(["none", "apikey", "bearer", "form-login", "cookie-import"]);
 
 /** Returns a list of rule violations. Empty list means the connector conforms. */
 export function checkConformance(connector: Connector): string[] {
@@ -15,7 +15,7 @@ export function checkConformance(connector: Connector): string[] {
   if (!SEMVER.test(connector.version)) {
     problems.push(`version "${connector.version}" must be semver`);
   }
-  if (!STATUSES.includes(connector.status)) {
+  if (!STATUSES.has(connector.status)) {
     problems.push(`status "${connector.status}" is invalid`);
   }
   if (connector.description.trim().length < 10) {
@@ -24,7 +24,7 @@ export function checkConformance(connector: Connector): string[] {
   if (!URL.canParse(connector.baseUrl) || !connector.baseUrl.startsWith("https://")) {
     problems.push(`baseUrl "${connector.baseUrl}" must be an https URL`);
   }
-  if (!METHODS.includes(connector.auth.method)) {
+  if (!METHODS.has(connector.auth.method)) {
     problems.push(`auth method "${connector.auth.method}" is invalid`);
   }
   if (connector.tools.length === 0) {

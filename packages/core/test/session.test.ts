@@ -20,6 +20,7 @@ describe("secrets", () => {
 });
 
 describe("createSessionFetch", () => {
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const fake = () => {
     const seen: string[] = [];
     const fn = async (input: RequestInfo | URL, init?: RequestInit) => {

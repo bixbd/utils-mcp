@@ -25,7 +25,7 @@ const FORBIDDEN_FILES: { reason: string; pattern: RegExp }[] = [
   { reason: "session database", pattern: /\.(sqlite|sqlite3|db)$/ },
 ];
 
-const isTestOrFixture = (path: string) => /(^|\/)(test|tests|fixtures)\//.test(path) || /\.test\.ts$/.test(path);
+const isTestOrFixture = (path: string) => /(^|\/)(test|tests|fixtures)\//.test(path) || path.endsWith(".test.ts");
 
 export function scanForSecrets(files: ScannedFile[]): Finding[] {
   const findings: Finding[] = [];

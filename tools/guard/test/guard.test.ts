@@ -34,7 +34,9 @@ describe("validateCommitMessage", () => {
 });
 
 describe("scanForSecrets", () => {
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const scan = (path: string, content: string) => scanForSecrets([{ path, content }]);
+  // oxlint-disable-next-line unicorn/consistent-function-scoping
   const fake = (prefix: string, length: number) => prefix + "a".repeat(length);
 
   test("passes ordinary code", () => {
