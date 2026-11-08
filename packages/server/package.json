@@ -34,5 +34,16 @@
     "@bixbd/utils-mcp-connector-desco": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "packages/server"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
   }
 }

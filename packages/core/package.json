@@ -11,5 +11,19 @@
   },
   "dependencies": {
     "zod": "^3.25.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "packages/core"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "bun": ">=1.1.0"
   }
 }

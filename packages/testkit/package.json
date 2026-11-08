@@ -9,5 +9,21 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
-  "dependencies": { "@bixbd/utils-mcp-core": "workspace:*" }
+  "dependencies": {
+    "@bixbd/utils-mcp-core": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "packages/testkit"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "bun": ">=1.1.0"
+  }
 }
