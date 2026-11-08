@@ -1,14 +1,43 @@
 {
   "name": "@bixbd/utils-mcp",
   "version": "0.0.0",
-  "description": "Connect utility portals to AI agents through MCP",
+  "description": "Connect utility portals to AI agents through MCP. Local stdio server for Bun; credentials stay on your machine.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-agents",
+    "claude",
+    "bun",
+    "utilities",
+    "portals",
+    "stdio"
+  ],
+  "license": "MIT",
+  "author": "BIXBD (https://github.com/bixbd)",
+  "homepage": "https://github.com/bixbd/utils-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/bixbd/utils-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "packages/server"
+  },
   "type": "module",
   "bin": {
     "utils-mcp": "src/cli.ts"
   },
   "files": [
-    "src"
+    "src",
+    "README.md",
+    "LICENSE"
   ],
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "echo \"server: runs from source with Bun\"",
     "typecheck": "tsc --noEmit",
@@ -34,16 +63,5 @@
     "@bixbd/utils-mcp-connector-desco": {
       "optional": true
     }
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bixbd/utils-mcp.git",
-    "directory": "packages/server"
-  },
-  "engines": {
-    "bun": ">=1.1.0"
   }
 }
