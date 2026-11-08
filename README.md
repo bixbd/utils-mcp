@@ -4,31 +4,69 @@ An open project to connect utility portals with AI agents through the Model Cont
 
 ## Why we're building this
 
-Useful tools are scattered across websites and portals. Finding the right one and using it often means switching between sites and repeating manual steps.
+Useful tools are scattered across websites and portals. Finding the right one and using it often means switching between sites and repeating manual steps. **utils-mcp** brings them together and gives AI agents a consistent way to use them.
 
-We're building **utils-mcp** to bring these utilities together and give AI agents a consistent way to discover and access them.
+## Status
 
-## What we're working toward
+Early scaffold. The monorepo, connector standard, test kit and one reference connector exist. Real portal connectors come next.
 
-- **Discover utilities:** Build a shared directory of useful tools and portals.
-- **Connect agents:** Expose supported utilities through MCP tools.
-- **Make usage clear:** Document what each utility does, the inputs it needs, and the results it returns.
-- **Build in the open:** Let the community suggest portals, contribute integrations, and improve documentation.
+## How it works
 
-## Project status
+- **Connectors** expose a few task-shaped tools each (`<connector>_<verb>_<noun>`), with read/write annotations, typed input, and errors that tell the AI how to fix the problem.
+- **Config** decides which connectors are enabled, so the AI's tool list stays small.
+- **Runs locally** over stdio with Bun. Credentials stay on your machine.
 
-This project is in its early planning stage. There are no working integrations or installation instructions yet. We'll add setup guides and examples as the implementation takes shape.
+## Repo layout
+
+```
+packages/core       Connector types, errors, registry, input validation
+packages/testkit    Conformance checks and an offline fetch replayer
+packages/server     The MCP server and CLI (published as @bixbd/utils-mcp)
+connectors/example  Reference connector. Copy it to add a new one
+```
+
+## Develop
+
+```bash
+bun install        # also installs the Husky git hooks
+bun run lint       # Oxlint
+bun run typecheck  # tsc via Turborepo
+bun run test       # bun test via Turborepo
+```
+
+Git hooks: `pre-commit` runs lint-staged (Oxlint) and typecheck; `pre-push` runs the tests.
+
+## Add a connector
+
+1. Copy `connectors/example` to `connectors/<name>`.
+2. Rename the package and the connector `id`.
+3. Save real portal responses in `fixtures/` and test against them with `replayFetch`.
+4. Make sure `checkConformance(connector)` returns no problems.
+5. Register it in `packages/server/src/connectors.ts`.
+
+## Use it with Claude
+
+Create `~/.utils-mcp/config.json`:
+
+```json
+{ "enabled": ["example"] }
+```
+
+Then add the server (once published to npm):
+
+```json
+{
+  "mcpServers": {
+    "utils": { "command": "bunx", "args": ["@bixbd/utils-mcp"] }
+  }
+}
+```
+
+From a checkout: `"command": "bun", "args": ["/path/to/utils-mcp/packages/server/src/cli.ts"]`.
 
 ## Contribute
 
-Have a utility portal you'd like your agents to access? [Open an issue](https://github.com/bixbd/utils-mcp/issues) with:
-
-- The portal's name and URL.
-- What it helps you do.
-- An example task you'd like an AI agent to perform.
-- Any available API documentation or access requirements.
-
-Ideas, documentation improvements, and integration proposals are welcome.
+Have a utility portal you'd like your agents to access? [Open an issue](https://github.com/bixbd/utils-mcp/issues) with the portal's name and URL, what it helps you do, an example task, and any API docs or access requirements.
 
 ---
 
