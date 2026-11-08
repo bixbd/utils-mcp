@@ -13,4 +13,4 @@ import { defineConnector, defineTool, noAuth, z } from "@bixbd/utils-mcp-core";
 - A small HTTP client with an in-memory session, one re-login on 401, and clear errors when the portal changes.
 - `maskLast4` and secret helpers for multiple accounts.
 
-Start from `bun run new:connector <id>` in the [repository](https://github.com/bixbd/utils-mcp) and read [CONTRIBUTING.md](https://github.com/bixbd/utils-mcp/blob/main/CONTRIBUTING.md). MIT License.
+Start from `bun run new:connector <id>` in the [repository](https://github.com/bixbd/utils-mcp) and read the [connector guide](https://github.com/bixbd/utils-mcp/blob/main/docs/ADDING_A_CONNECTOR.md). MIT License.

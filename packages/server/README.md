@@ -92,4 +92,4 @@ Set the config path with `UTILS_MCP_CONFIG=/path/to/config.json` if you keep it 
 
 ## Links
 
-[Source and issues](https://github.com/bixbd/utils-mcp) · [Write a connector](https://github.com/bixbd/utils-mcp/blob/main/CONTRIBUTING.md) · MIT License
+[Source and issues](https://github.com/bixbd/utils-mcp) · [Write a connector](https://github.com/bixbd/utils-mcp/blob/main/docs/ADDING_A_CONNECTOR.md) · MIT License
