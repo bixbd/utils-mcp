@@ -1,0 +1,11 @@
+{
+  "name": "@bixbd/utils-mcp-scaffold",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"scaffold: no build step\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  }
+}

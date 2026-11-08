@@ -19,10 +19,11 @@ Early scaffold. The monorepo, connector standard, test kit and one reference con
 ## Repo layout
 
 ```
-packages/core       Connector types, errors, registry, input validation
-packages/testkit    Conformance checks and an offline fetch replayer
+packages/core       defineConnector/defineTool, auth strategies, HTTP client, registry
+packages/testkit    Conformance checks, fakePortal, replayFetch
 packages/server     The MCP server and CLI (published as @bixbd/utils-mcp)
-connectors/example  Reference connector. Copy it to add a new one
+tools/scaffold      `new:connector` generator and `check:connectors` repo rules
+connectors/example  Reference connector (pattern to follow)
 connectors/desco    DESCO prepaid electricity: accounts and balance (see its README)
 ```
 
@@ -32,6 +33,7 @@ connectors/desco    DESCO prepaid electricity: accounts and balance (see its REA
 bun install        # also installs the Husky git hooks
 bun run lint       # Oxlint
 bun run typecheck  # tsc via Turborepo
+bun run check:connectors  # repo rules lint can't express
 bun run test       # bun test via Turborepo
 ```
 
@@ -39,11 +41,11 @@ Git hooks: `pre-commit` runs lint-staged (Oxlint) and typecheck; `pre-push` runs
 
 ## Add a connector
 
-1. Copy `connectors/example` to `connectors/<name>`.
-2. Rename the package and the connector `id`.
-3. Save real portal responses in `fixtures/` and test against them with `replayFetch`.
-4. Make sure `checkConformance(connector)` returns no problems.
-5. Register it in `packages/server/src/connectors.ts`.
+```bash
+bun run new:connector acme-portal
+```
+
+Then follow [CONTRIBUTING.md](CONTRIBUTING.md). The server loads enabled connectors by name, so there is nothing to register.
 
 ## Use it with Claude
 
@@ -72,7 +74,7 @@ From a checkout: `"command": "bun", "args": ["/path/to/utils-mcp/packages/server
 | `example` | `example_get_status` | none |
 | `desco` | `desco_list_accounts`, `desco_get_balance`, `desco_get_realtime_status` | `DESCO_USERNAME`, `DESCO_PASSWORD` env vars |
 
-Enable connectors in `~/.utils-mcp/config.json`, for example `{ "enabled": ["desco"] }`. Credentials are read from the server's environment. For a second account, add the suffix `__LABEL` (for example `DESCO_USERNAME__OFFICE`) and pass `account: "office"` in the tool call.
+Nothing is enabled by default. Enable connectors in `~/.utils-mcp/config.json`, for example `{ "enabled": ["desco"] }`. Each connector is its own package (`@bixbd/utils-mcp-connector-<id>`) loaded on demand. Credentials are read from the server's environment. For a second account, add the suffix `__LABEL` (for example `DESCO_USERNAME__OFFICE`) and pass `account: "office"` in the tool call.
 
 ## Contribute
 

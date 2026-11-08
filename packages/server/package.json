@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "description": "Connect utility portals to AI agents through MCP",
   "type": "module",
-  "bin": { "utils-mcp": "src/cli.ts" },
-  "files": ["src"],
+  "bin": {
+    "utils-mcp": "src/cli.ts"
+  },
+  "files": [
+    "src"
+  ],
   "scripts": {
     "build": "echo \"server: runs from source with Bun\"",
     "typecheck": "tsc --noEmit",
@@ -13,8 +17,22 @@
   },
   "dependencies": {
     "@bixbd/utils-mcp-core": "workspace:*",
-    "@bixbd/utils-mcp-connector-desco": "workspace:*",
-    "@bixbd/utils-mcp-connector-example": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@bixbd/utils-mcp-connector-example": "workspace:*",
+    "@bixbd/utils-mcp-connector-desco": "workspace:*"
+  },
+  "peerDependencies": {
+    "@bixbd/utils-mcp-connector-example": "*",
+    "@bixbd/utils-mcp-connector-desco": "*"
+  },
+  "peerDependenciesMeta": {
+    "@bixbd/utils-mcp-connector-example": {
+      "optional": true
+    },
+    "@bixbd/utils-mcp-connector-desco": {
+      "optional": true
+    }
   }
 }

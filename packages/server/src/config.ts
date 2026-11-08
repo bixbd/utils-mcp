@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 export type Config = { enabled: string[] };
 
-export const DEFAULT_CONFIG: Config = { enabled: ["example"] };
+export const DEFAULT_CONFIG: Config = { enabled: [] };
 
 export function configPath(env: Record<string, string | undefined> = process.env): string {
   return env.UTILS_MCP_CONFIG ?? join(homedir(), ".utils-mcp", "config.json");

@@ -1,12 +1,14 @@
 import { toErrorPayload, UtilsError, type ToolErrorPayload } from "./errors";
-import type { Connector, ToolAnnotations, ToolContext, ToolDef, JsonSchema } from "./types";
-import { validateInput } from "./validate";
+import { createHttp } from "./http";
+import type { JsonSchema } from "./schema";
+import type { Connector, RuntimeContext, ToolAnnotations, ToolDef } from "./types";
 
 export type RegisteredTool = {
   name: string;
   connectorId: string;
   description: string;
   inputSchema: JsonSchema;
+  outputSchema: JsonSchema;
   annotations: ToolAnnotations;
 };
 
@@ -16,7 +18,7 @@ export type CallResult =
 
 export type Registry = {
   listTools(): RegisteredTool[];
-  callTool(name: string, input: Record<string, unknown>, ctx: ToolContext): Promise<CallResult>;
+  callTool(name: string, input: Record<string, unknown>, runtime: RuntimeContext): Promise<CallResult>;
 };
 
 export const toolName = (connectorId: string, tool: string) => `${connectorId}_${tool}`;
@@ -43,17 +45,18 @@ export function createRegistry(connectors: Connector[], enabled?: string[]): Reg
         connectorId: connector.id,
         description: tool.description,
         inputSchema: tool.inputSchema,
+        outputSchema: tool.outputSchema,
         annotations: tool.annotations,
       }));
     },
-    async callTool(name, input, ctx) {
+    async callTool(name, input, runtime) {
       try {
         const entry = byName.get(name);
         if (!entry) {
           throw new UtilsError("UNKNOWN_TOOL", `Unknown tool: ${name}`, "List the available tools and retry.");
         }
-        validateInput(entry.tool.inputSchema, input);
-        const data = await entry.tool.handler(input, ctx);
+        const http = createHttp(entry.connector, runtime);
+        const data = await entry.tool.run(input, { ...runtime, http });
         return { ok: true, data };
       } catch (error) {
         return { ok: false, error: toErrorPayload(error) };
