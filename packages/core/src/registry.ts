@@ -29,7 +29,9 @@ export function createRegistry(connectors: Connector[], enabled?: string[]): Reg
   for (const connector of active) {
     for (const tool of connector.tools) {
       const name = toolName(connector.id, tool.name);
-      if (byName.has(name)) throw new Error(`Duplicate tool name: ${name}`);
+      if (byName.has(name)) {
+        throw new Error(`Duplicate tool name: ${name}`);
+      }
       byName.set(name, { connector, tool });
     }
   }

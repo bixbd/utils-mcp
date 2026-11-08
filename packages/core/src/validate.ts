@@ -14,7 +14,9 @@ export function validateInput(schema: JsonSchema, input: Record<string, unknown>
   }
   for (const [key, spec] of Object.entries(schema.properties ?? {})) {
     const value = input[key];
-    if (value === undefined) continue;
+    if (value === undefined) {
+      continue;
+    }
     const ok =
       spec.type === "integer"
         ? Number.isInteger(value)

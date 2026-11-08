@@ -8,12 +8,12 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "lint": "oxlint .",
-    "lint:fix": "oxlint --fix .",
+    "lint": "oxlint --deny-warnings .",
+    "lint:fix": "oxlint --fix --deny-warnings .",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,mjs}": "oxlint --fix"
+    "*.{ts,tsx,js,mjs}": "oxlint --fix --deny-warnings"
   },
   "devDependencies": {
     "@types/bun": "latest",

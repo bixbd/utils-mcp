@@ -19,6 +19,8 @@ export function parseConfig(raw: string): Config {
 
 export async function loadConfig(path = configPath()): Promise<Config> {
   const file = Bun.file(path);
-  if (!(await file.exists())) return DEFAULT_CONFIG;
+  if (!(await file.exists())) {
+    return DEFAULT_CONFIG;
+  }
   return parseConfig(await file.text());
 }

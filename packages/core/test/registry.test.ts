@@ -68,6 +68,8 @@ describe("registry", () => {
   test("unknown tool returns UNKNOWN_TOOL", async () => {
     const result = await createRegistry([demo]).callTool("nope", {}, ctx);
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error.code).toBe("UNKNOWN_TOOL");
+    if (!result.ok) {
+      expect(result.error.code).toBe("UNKNOWN_TOOL");
+    }
   });
 });

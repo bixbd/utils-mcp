@@ -20,12 +20,16 @@ describe("example connector", () => {
   test("detects upstream format drift", async () => {
     const result = await run(replayFetch([{ match: "/api/status", body: { unexpected: true } }]));
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error.code).toBe("UPSTREAM_CHANGED");
+    if (!result.ok) {
+      expect(result.error.code).toBe("UPSTREAM_CHANGED");
+    }
   });
 
   test("maps HTTP errors to UPSTREAM_ERROR", async () => {
     const result = await run(replayFetch([{ match: "/api/status", status: 503, body: {} }]));
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error.code).toBe("UPSTREAM_ERROR");
+    if (!result.ok) {
+      expect(result.error.code).toBe("UPSTREAM_ERROR");
+    }
   });
 });

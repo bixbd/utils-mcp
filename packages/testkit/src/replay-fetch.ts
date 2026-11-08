@@ -12,7 +12,9 @@ export function replayFetch(fixtures: Fixture[]): typeof fetch {
   const fn = async (input: RequestInfo | URL): Promise<Response> => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     const fixture = fixtures.find((f) => url === f.match || url.includes(f.match));
-    if (!fixture) throw new Error(`replayFetch: no fixture for ${url}`);
+    if (!fixture) {
+      throw new Error(`replayFetch: no fixture for ${url}`);
+    }
     const isText = typeof fixture.body === "string";
     return new Response(isText ? (fixture.body as string) : JSON.stringify(fixture.body), {
       status: fixture.status ?? 200,
