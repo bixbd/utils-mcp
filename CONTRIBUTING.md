@@ -65,6 +65,7 @@ The secret scan blocks things that look like keys or tokens. If a finding is a h
 ## Code rules
 
 - TypeScript strict mode, Oxlint with warnings as errors, no `any`.
+- One file is at most 250 lines, blanks and comments included. Oxlint enforces it (`max-lines`) in lint, the pre-commit hook and CI. Split by responsibility instead of squeezing.
 - Tests are required. Each file must keep at least 80% line and function coverage.
 - Connectors only talk to portals through `ctx.http`, never `fetch`, and never read `process.env` directly.
 - Never commit credentials, real account data, cookies or tokens. Fixtures must be redacted.
