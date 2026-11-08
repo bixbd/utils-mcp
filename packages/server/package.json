@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@bixbd/utils-mcp-core": "workspace:*",
+    "@bixbd/utils-mcp-connector-desco": "workspace:*",
     "@bixbd/utils-mcp-connector-example": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.0.0"
   }

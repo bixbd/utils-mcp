@@ -23,6 +23,7 @@ packages/core       Connector types, errors, registry, input validation
 packages/testkit    Conformance checks and an offline fetch replayer
 packages/server     The MCP server and CLI (published as @bixbd/utils-mcp)
 connectors/example  Reference connector. Copy it to add a new one
+connectors/desco    DESCO prepaid electricity: accounts and balance (see its README)
 ```
 
 ## Develop
@@ -63,6 +64,15 @@ Then add the server (once published to npm):
 ```
 
 From a checkout: `"command": "bun", "args": ["/path/to/utils-mcp/packages/server/src/cli.ts"]`.
+
+## Connectors
+
+| Connector | Tools | Auth |
+| --- | --- | --- |
+| `example` | `example_get_status` | none |
+| `desco` | `desco_list_accounts`, `desco_get_balance`, `desco_get_realtime_status` | `DESCO_USERNAME`, `DESCO_PASSWORD` env vars |
+
+Enable connectors in `~/.utils-mcp/config.json`, for example `{ "enabled": ["desco"] }`. Credentials are read from the server's environment. For a second account, add the suffix `__LABEL` (for example `DESCO_USERNAME__OFFICE`) and pass `account: "office"` in the tool call.
 
 ## Contribute
 

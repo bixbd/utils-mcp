@@ -27,7 +27,7 @@ const demo: Connector = {
   ],
 };
 
-const ctx = { account: "default", fetch };
+const ctx = { account: "default", fetch, secrets: { get: () => undefined } };
 
 describe("registry", () => {
   test("prefixes tool names with the connector id", () => {

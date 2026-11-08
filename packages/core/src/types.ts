@@ -13,11 +13,18 @@ export type ToolAnnotations = {
 
 export type AuthMethod = "none" | "apikey" | "bearer" | "form-login" | "cookie-import";
 
+export type SecretReader = {
+  /** Returns a secret for the current account, or undefined if it is not configured. */
+  get(name: string): string | undefined;
+};
+
 export type ToolContext = {
   /** Account label chosen for this call (default account if omitted). */
   account: string;
   /** Fetch bound to the account's session (cookies/headers applied). */
   fetch: typeof fetch;
+  /** Credentials for the current account. Never log these. */
+  secrets: SecretReader;
 };
 
 export type ToolDef = {
