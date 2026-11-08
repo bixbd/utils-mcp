@@ -1,0 +1,48 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+  id-token: write
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Tag must be on main
+        run: git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: bun install
+      - run: bun run check
+      - name: Set versions from the tag
+        run: bun tools/release/src/cli.ts set-version "$GITHUB_REF_NAME"
+      - name: Pack and publish in dependency order
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+        run: |
+          set -euo pipefail
+          DIST_TAG=$(bun tools/release/src/cli.ts dist-tag "$GITHUB_REF_NAME")
+          mkdir -p "$RUNNER_TEMP/packs"
+          for dir in $(bun tools/release/src/cli.ts order "$GITHUB_REF_NAME"); do
+            (cd "$dir" && bun pm pack --destination "$RUNNER_TEMP/packs" --quiet)
+          done
+          for tgz in "$RUNNER_TEMP"/packs/*.tgz; do
+            npm publish "$tgz" --access public --tag "$DIST_TAG"
+          done
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes ${{ contains(github.ref_name, '-') && '--prerelease' || '' }}

@@ -9,6 +9,11 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
-  "dependencies": { "@bixbd/utils-mcp-core": "workspace:*" },
-  "devDependencies": { "@bixbd/utils-mcp-testkit": "workspace:*" }
+  "dependencies": {
+    "@bixbd/utils-mcp-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@bixbd/utils-mcp-testkit": "workspace:*"
+  },
+  "private": true
 }

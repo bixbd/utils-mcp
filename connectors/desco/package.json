@@ -9,6 +9,24 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
-  "dependencies": { "@bixbd/utils-mcp-core": "workspace:*" },
-  "devDependencies": { "@bixbd/utils-mcp-testkit": "workspace:*" }
+  "dependencies": {
+    "@bixbd/utils-mcp-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@bixbd/utils-mcp-testkit": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "connectors/desco"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "bun": ">=1.1.0"
+  }
 }

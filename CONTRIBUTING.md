@@ -75,3 +75,13 @@ export default acme;
 - [ ] Access levels are right (`read` / `write` / `destructive`)
 - [ ] Sensitive values are masked, fixtures are redacted
 - [ ] README lists the credentials
+
+## Releasing to npm
+
+Releases are tag driven and all public packages share one version.
+
+1. One-time: create an npm automation token with publish rights to the `@bixbd` scope and save it as the `NPM_TOKEN` secret in the GitHub `npm` environment (add required reviewers there if you want an approval step).
+2. Make sure `main` is green, then tag it: `git tag v0.1.0 && git push origin v0.1.0`.
+3. The Release workflow checks the tag is on `main`, runs the full `bun run check`, stamps the version, publishes in dependency order with provenance, and creates a GitHub release.
+
+Tags like `v0.2.0-beta.1` publish under the `next` dist-tag and never become `latest`. The example connector and all `tools/*` are private and never published.

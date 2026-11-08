@@ -1,0 +1,11 @@
+{
+  "name": "@bixbd/utils-mcp-release",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"release: no build step\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  }
+}
