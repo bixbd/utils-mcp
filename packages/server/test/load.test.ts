@@ -39,7 +39,7 @@ describe("loadConnectors", () => {
   });
 
   test("tells the user how to install a missing connector", async () => {
-    await expect(loadConnectors(["alpha"], importerFor({}))).rejects.toThrow("bun add @bixbd/utils-mcp-connector-alpha");
+    await expect(loadConnectors(["alpha"], importerFor({}))).rejects.toThrow("npm install @bixbd/utils-mcp-connector-alpha");
   });
 
   test("rejects ids that could import arbitrary packages", async () => {

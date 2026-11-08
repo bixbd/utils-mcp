@@ -1,18 +1,23 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 import { loadConfig } from "./config";
+import { resolveEnabled } from "./enabled";
 import { loadConnectors } from "./load";
 import { startServer } from "./server";
 
 // stdout is the MCP protocol channel. Log to stderr only.
 const log = (message: string) => process.stderr.write(`utils-mcp: ${message}\n`);
 
+if (process.argv[2] === "setup") {
+  const { runSetup } = await import("./setup");
+  await runSetup();
+  process.exit(0);
+}
+
 try {
   const config = await loadConfig();
-  if (config.enabled.length === 0) {
-    log('no connectors enabled. Create ~/.utils-mcp/config.json with {"enabled": ["desco"]}.');
-  }
-  const connectors = await loadConnectors(config.enabled);
-  await startServer(connectors, config.enabled);
+  const enabled = resolveEnabled(config.enabled);
+  const connectors = await loadConnectors(enabled);
+  await startServer(connectors, enabled);
 } catch (error) {
   log(error instanceof Error ? error.message : "failed to start");
   process.exit(1);

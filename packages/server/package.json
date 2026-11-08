@@ -1,13 +1,12 @@
 {
   "name": "@bixbd/utils-mcp",
   "version": "0.0.0",
-  "description": "Connect utility portals to AI agents through MCP. Local stdio server for Bun; credentials stay on your machine.",
+  "description": "Connect utility portals to AI agents through MCP. Works with any MCP app via npx; credentials stay on your machine.",
   "keywords": [
     "mcp",
     "model-context-protocol",
     "ai-agents",
     "claude",
-    "bun",
     "utilities",
     "portals",
     "stdio"
@@ -25,43 +24,30 @@
   },
   "type": "module",
   "bin": {
-    "utils-mcp": "src/cli.ts"
+    "utils-mcp": "dist/cli.js"
   },
   "files": [
-    "src",
+    "dist",
     "README.md",
     "LICENSE"
   ],
   "engines": {
-    "bun": ">=1.1.0"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "echo \"server: runs from source with Bun\"",
+    "build": "bun build src/cli.ts --target=node --outfile=dist/cli.js && chmod +x dist/cli.js",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "start": "bun src/cli.ts"
-  },
-  "dependencies": {
-    "@bixbd/utils-mcp-core": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "start": "node dist/cli.js",
+    "prepack": "bun run build"
   },
   "devDependencies": {
     "@bixbd/utils-mcp-connector-example": "workspace:*",
-    "@bixbd/utils-mcp-connector-desco": "workspace:*"
-  },
-  "peerDependencies": {
-    "@bixbd/utils-mcp-connector-example": "*",
-    "@bixbd/utils-mcp-connector-desco": "*"
-  },
-  "peerDependenciesMeta": {
-    "@bixbd/utils-mcp-connector-example": {
-      "optional": true
-    },
-    "@bixbd/utils-mcp-connector-desco": {
-      "optional": true
-    }
+    "@bixbd/utils-mcp-connector-desco": "workspace:*",
+    "@bixbd/utils-mcp-core": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.0"
   }
 }

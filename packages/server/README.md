@@ -15,51 +15,51 @@ You enable the connectors you want. Each connector adds a few task-shaped tools 
 
 ## Requirements
 
-[Bun](https://bun.sh) 1.1 or newer. The server runs TypeScript directly with Bun.
+[Node.js](https://nodejs.org) 18 or newer. The package is a single file with no dependencies, and the `desco` connector is built in.
 
 ## Install
 
-Install the server and the connectors you need into one folder. Connectors are separate packages, and the server loads them from the folder it is installed in.
+Run the setup. It asks for your portal login, finds your AI apps and configures them:
 
 ```bash
-mkdir -p ~/.utils-mcp && cd ~/.utils-mcp
-bun add @bixbd/utils-mcp@next @bixbd/utils-mcp-connector-desco@next
+npx -y @bixbd/utils-mcp@next setup
 ```
 
-## Choose connectors
+It supports Claude Desktop, Claude Code, Cursor, Windsurf, VS Code and Gemini CLI. For anything else it prints a snippet to paste. Restart your AI app afterwards and ask something like "What is my DESCO balance?"
 
-Create `~/.utils-mcp/config.json`. Nothing is enabled by default.
+## Add it by hand
 
-```json
-{ "enabled": ["desco"] }
-```
-
-Each name `<id>` loads the package `@bixbd/utils-mcp-connector-<id>`, so it must be installed in the same folder.
-
-## Add it to your AI app
-
-Use the full path, because most apps do not expand `~`.
-
-**Claude Desktop** (`claude_desktop_config.json`):
+Every MCP app takes the same three things: a command, arguments and environment variables.
 
 ```json
 {
   "mcpServers": {
     "utils": {
-      "command": "/Users/you/.utils-mcp/node_modules/.bin/utils-mcp",
+      "command": "npx",
+      "args": ["-y", "@bixbd/utils-mcp@next"],
       "env": { "DESCO_USERNAME": "your-username", "DESCO_PASSWORD": "your-password" }
     }
   }
 }
 ```
 
-**Claude Code:**
+VS Code uses the key `servers` instead of `mcpServers`. For Claude Code:
 
 ```bash
-claude mcp add utils -e DESCO_USERNAME=your-username -e DESCO_PASSWORD=your-password -- ~/.utils-mcp/node_modules/.bin/utils-mcp
+claude mcp add utils -e DESCO_USERNAME=your-username -e DESCO_PASSWORD=your-password -- npx -y @bixbd/utils-mcp@next
 ```
 
-Restart the app, then ask something like "What is my DESCO balance?"
+If an app cannot find `npx` (some desktop apps do not see your shell PATH), use the full path from `which npx` as the command.
+
+## Choose connectors
+
+By default every built-in connector is on, and only the ones with credentials will work. To limit them, set `UTILS_MCP_ENABLED=desco` (comma separated) in the same `env` block. Alternatively, create `~/.utils-mcp/config.json`:
+
+```json
+{ "enabled": ["desco"] }
+```
+
+Connectors that are not built in are separate packages (`@bixbd/utils-mcp-connector-<id>`) that you install next to the server.
 
 ## Multiple accounts
 
@@ -76,8 +76,8 @@ Then ask "check the office DESCO account", and the AI calls the tool with `accou
 
 | Message | Fix |
 | --- | --- |
-| `no connectors enabled` | Create `~/.utils-mcp/config.json` with `{"enabled": ["desco"]}`. |
-| Cannot find the connector package | Run `bun add @bixbd/utils-mcp-connector-<id>@next` inside `~/.utils-mcp`. |
+| Cannot find the connector package | Only built-in connectors work out of the box. Install others with `npm install @bixbd/utils-mcp-connector-<id>@next` in the folder the server runs from. |
+| The app says the server failed to start | Install Node.js 18+, or put the full path to `npx` in the config. |
 | A tool says credentials are missing | Add the environment variables to your app's MCP config (the `env` block). |
 | The portal changed | The tool returns `UPSTREAM_CHANGED`. Open an issue with the tool name. |
 
