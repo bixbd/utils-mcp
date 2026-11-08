@@ -8,7 +8,7 @@ Useful tools are scattered across websites and portals. Finding the right one an
 
 ## Status
 
-Early scaffold. The monorepo, connector standard, test kit and one reference connector exist. Real portal connectors come next.
+Beta. The server, connector standard, test kit and the DESCO connector are published to npm under the `next` tag. More connectors are coming.
 
 ## How it works
 
@@ -49,21 +49,15 @@ Then follow [CONTRIBUTING.md](CONTRIBUTING.md). The server loads enabled connect
 
 ## Use it with Claude
 
-Create `~/.utils-mcp/config.json`:
+Beta packages are on npm under the `next` tag. Install the server and the connectors you need into one folder:
 
-```json
-{ "enabled": ["example"] }
+```bash
+mkdir -p ~/.utils-mcp && cd ~/.utils-mcp
+bun add @bixbd/utils-mcp@next @bixbd/utils-mcp-connector-desco@next
+echo '{ "enabled": ["desco"] }' > config.json
 ```
 
-Then add the server (once published to npm):
-
-```json
-{
-  "mcpServers": {
-    "utils": { "command": "bunx", "args": ["@bixbd/utils-mcp"] }
-  }
-}
-```
+Then add it to your AI app with the full path and your credentials. Full setup for Claude Desktop and Claude Code, multiple accounts and troubleshooting are in the [server README](packages/server/README.md).
 
 From a checkout: `"command": "bun", "args": ["/path/to/utils-mcp/packages/server/src/cli.ts"]`.
 
@@ -82,4 +76,4 @@ Have a utility portal you'd like your agents to access? [Open an issue](https://
 
 ---
 
-Built in the open by [BixBD](https://github.com/bixbd).
+MIT License. Built in the open by [BixBD](https://github.com/bixbd).

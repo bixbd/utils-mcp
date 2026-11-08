@@ -1,9 +1,40 @@
 {
   "name": "@bixbd/utils-mcp-connector-desco",
   "version": "0.0.0",
+  "description": "utils-mcp connector for the DESCO prepaid electricity portal (Bangladesh): accounts and balance. Unofficial.",
+  "keywords": [
+    "mcp",
+    "desco",
+    "bangladesh",
+    "electricity",
+    "prepaid",
+    "utils-mcp-connector"
+  ],
+  "license": "MIT",
+  "author": "BIXBD (https://github.com/bixbd)",
+  "homepage": "https://github.com/bixbd/utils-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/bixbd/utils-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bixbd/utils-mcp.git",
+    "directory": "connectors/desco"
+  },
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "bun": ">=1.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "echo \"desco: no build step\"",
     "typecheck": "tsc --noEmit",
@@ -14,19 +45,5 @@
   },
   "devDependencies": {
     "@bixbd/utils-mcp-testkit": "workspace:*"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bixbd/utils-mcp.git",
-    "directory": "connectors/desco"
-  },
-  "files": [
-    "src"
-  ],
-  "engines": {
-    "bun": ">=1.1.0"
   }
 }
