@@ -1,0 +1,6 @@
+[test]
+coverage = true
+coverageReporter = ["text"]
+coverageThreshold = { lines = 0.8, functions = 0.8 }
+# Counts core auth.ts and http.ts, which are tested here. Other core files are covered in packages/core.
+coveragePathIgnorePatterns = ["../core/src/connector.ts", "../core/src/errors.ts", "../core/src/index.ts", "../core/src/mask.ts", "../core/src/registry.ts", "../core/src/request-url.ts", "../core/src/schema.ts", "../core/src/secrets.ts", "../core/src/session-fetch.ts", "../core/src/tool.ts", "../core/src/types.ts"]

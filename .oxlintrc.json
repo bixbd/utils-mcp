@@ -9,23 +9,60 @@
   "rules": {
     "no-console": "error",
     "no-debugger": "error",
+    "no-alert": "error",
     "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new-func": "error",
     "no-var": "error",
     "prefer-const": "error",
     "eqeqeq": "error",
     "curly": "error",
     "no-unused-vars": "error",
+    "no-nested-ternary": "error",
+    "no-else-return": "error",
+    "no-lonely-if": "error",
+    "no-param-reassign": "error",
+    "no-plusplus": "error",
+    "no-multi-assign": "error",
+    "no-return-assign": "error",
+    "no-sequences": "error",
+    "no-throw-literal": "error",
+    "no-void": "error",
+    "no-bitwise": "error",
+    "no-implicit-coercion": "error",
+    "no-unneeded-ternary": "error",
+    "default-param-last": "error",
+    "prefer-promise-reject-errors": "error",
+    "prefer-object-spread": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "radix": "error",
+    "yoda": "error",
+    "max-depth": ["error", 4],
+    "max-params": ["error", 4],
+    "complexity": ["error", 20],
     "typescript/no-explicit-any": "error",
     "typescript/no-non-null-assertion": "error",
     "typescript/consistent-type-imports": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/no-inferrable-types": "error",
+    "typescript/prefer-as-const": "error",
+    "typescript/no-empty-object-type": "error",
     "import/no-cycle": "error",
-    "import/no-duplicates": "error"
+    "import/no-duplicates": "error",
+    "import/no-self-import": "error"
   },
-  "ignorePatterns": ["**/dist/**", "**/node_modules/**", ".turbo/**"],
+  "ignorePatterns": ["**/dist/**", "**/node_modules/**", ".turbo/**", "coverage/**"],
   "overrides": [
     {
       "files": ["**/test/**", "**/*.test.ts"],
-      "rules": { "no-console": "off", "typescript/no-non-null-assertion": "off" }
+      "rules": {
+        "no-console": "off",
+        "typescript/no-non-null-assertion": "off",
+        "max-params": "off",
+        "complexity": "off"
+      }
     }
   ]
 }

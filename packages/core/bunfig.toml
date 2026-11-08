@@ -1,0 +1,6 @@
+[test]
+coverage = true
+coverageReporter = ["text"]
+coverageThreshold = { lines = 0.8, functions = 0.8 }
+# auth.ts and http.ts are exercised by packages/testkit/test/http.test.ts (they need fakePortal).
+coveragePathIgnorePatterns = ["src/auth.ts", "src/http.ts"]

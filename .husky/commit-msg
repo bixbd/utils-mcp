@@ -1,0 +1,1 @@
+bun tools/guard/src/cli.ts commit-msg "$1"

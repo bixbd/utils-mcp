@@ -54,7 +54,7 @@ export function createHttp(
     const response = await helpers.fetch(helpers.url(path), {
       method,
       headers,
-      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      body: options.body === undefined ? null : JSON.stringify(options.body),
     });
 
     if (response.status === 401) {

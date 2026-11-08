@@ -1,0 +1,5 @@
+[test]
+coverage = true
+coverageReporter = ["text"]
+coverageThreshold = { lines = 0.8, functions = 0.8 }
+coveragePathIgnorePatterns = ["../core/**", "src/cli.ts", "src/server.ts"]

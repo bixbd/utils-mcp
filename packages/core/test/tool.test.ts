@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { defineTool, maskLast4, toJsonSchema, z } from "../src";
+import { defineTool, maskLast4, toJsonSchema, urlOf, z } from "../src";
 
 describe("toJsonSchema", () => {
   test("produces an object schema without the $schema key", () => {
@@ -43,5 +43,13 @@ describe("maskLast4", () => {
     expect(maskLast4("123")).toBeNull();
     expect(maskLast4(undefined)).toBeNull();
     expect(maskLast4(null)).toBeNull();
+  });
+});
+
+describe("urlOf", () => {
+  test("accepts strings, URL objects and Request objects", () => {
+    expect(urlOf("https://a.test/x")).toBe("https://a.test/x");
+    expect(urlOf(new URL("https://a.test/y"))).toBe("https://a.test/y");
+    expect(urlOf(new Request("https://a.test/z"))).toBe("https://a.test/z");
   });
 });

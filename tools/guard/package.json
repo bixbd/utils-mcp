@@ -1,0 +1,11 @@
+{
+  "name": "@bixbd/utils-mcp-guard",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "echo \"guard: no build step\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  }
+}

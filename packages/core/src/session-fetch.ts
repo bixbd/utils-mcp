@@ -1,3 +1,5 @@
+import { urlOf } from "./request-url";
+
 export type SessionFetch = {
   /** fetch that stores Set-Cookie values and sends them back on later requests. */
   fetch: typeof fetch;
@@ -23,7 +25,7 @@ export function createSessionFetch(base: typeof fetch = fetch): SessionFetch {
   };
 
   const sessionFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const url = urlOf(input);
     const host = new URL(url).host;
     const jar = jarFor(host);
     const headers = new Headers(init?.headers);
