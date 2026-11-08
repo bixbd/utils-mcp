@@ -4,6 +4,7 @@ const ID = /^[a-z][a-z0-9-]*$/;
 const TOOL = /^[a-z]+(_[a-z0-9]+)+$/;
 const SEMVER = /^\d+\.\d+\.\d+$/;
 const STATUSES = ["active", "beta", "broken", "deprecated"];
+const METHODS = ["none", "apikey", "bearer", "form-login", "cookie-import"];
 
 /** Returns a list of rule violations. Empty list means the connector conforms. */
 export function checkConformance(connector: Connector): string[] {
@@ -20,8 +21,11 @@ export function checkConformance(connector: Connector): string[] {
   if (connector.description.trim().length < 10) {
     problems.push("connector description is too short");
   }
-  if (connector.auth.length === 0) {
-    problems.push('auth must list at least one method (use "none")');
+  if (!URL.canParse(connector.baseUrl) || !connector.baseUrl.startsWith("https://")) {
+    problems.push(`baseUrl "${connector.baseUrl}" must be an https URL`);
+  }
+  if (!METHODS.includes(connector.auth.method)) {
+    problems.push(`auth method "${connector.auth.method}" is invalid`);
   }
   if (connector.tools.length === 0) {
     problems.push("connector has no tools");
@@ -41,13 +45,13 @@ export function checkConformance(connector: Connector): string[] {
       problems.push(`${label}: description must say what it does and when to use it (20+ chars)`);
     }
     if (tool.inputSchema.type !== "object") {
-      problems.push(`${label}: inputSchema.type must be "object"`);
+      problems.push(`${label}: input schema must be an object`);
+    }
+    if (tool.outputSchema.type !== "object") {
+      problems.push(`${label}: output schema must be an object`);
     }
     if (tool.annotations.readOnlyHint && tool.annotations.destructiveHint) {
       problems.push(`${label}: cannot be both read-only and destructive`);
-    }
-    if (!tool.annotations.readOnlyHint && tool.annotations.destructiveHint === undefined) {
-      problems.push(`${label}: write tools must set destructiveHint`);
     }
   }
   return problems;

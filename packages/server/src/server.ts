@@ -13,6 +13,7 @@ export async function startServer(connectors: Connector[], enabled: string[]): P
       name: t.name,
       description: t.description,
       inputSchema: withAccountInput(t.inputSchema),
+      outputSchema: t.outputSchema,
       annotations: t.annotations,
     })),
   }));
@@ -22,7 +23,10 @@ export async function startServer(connectors: Connector[], enabled: string[]): P
     const { account, input } = splitAccount(args);
     const result = await registry.callTool(request.params.name, input, buildContext(account));
     if (result.ok) {
-      return { content: [{ type: "text", text: JSON.stringify(result.data) }] };
+      return {
+        content: [{ type: "text", text: JSON.stringify(result.data) }],
+        structuredContent: result.data as Record<string, unknown>,
+      };
     }
     return { isError: true, content: [{ type: "text", text: JSON.stringify(result.error) }] };
   });

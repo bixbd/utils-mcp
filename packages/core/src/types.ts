@@ -1,15 +1,13 @@
-export type JsonSchema = {
-  type: "object";
-  properties?: Record<string, { type: "string" | "number" | "boolean" | "integer"; description?: string }>;
-  required?: string[];
-  additionalProperties?: boolean;
-};
+import type { z } from "zod/v4";
+import type { JsonSchema } from "./schema";
 
 export type ToolAnnotations = {
   readOnlyHint: boolean;
   destructiveHint: boolean;
-  idempotentHint?: boolean;
+  idempotentHint: boolean;
 };
+
+export type Access = "read" | "write" | "destructive";
 
 export type AuthMethod = "none" | "apikey" | "bearer" | "form-login" | "cookie-import";
 
@@ -18,31 +16,68 @@ export type SecretReader = {
   get(name: string): string | undefined;
 };
 
-export type ToolContext = {
-  /** Account label chosen for this call (default account if omitted). */
+/** What the server provides for every tool call. */
+export type RuntimeContext = {
+  /** Account label chosen for this call. */
   account: string;
-  /** Fetch bound to the account's session (cookies/headers applied). */
+  /** The raw fetch. Connectors should use ctx.http instead. */
   fetch: typeof fetch;
   /** Credentials for the current account. Never log these. */
   secrets: SecretReader;
 };
 
+export type RequestOptions = { method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; body?: unknown };
+
+/** Authenticated, session-aware client for one connector and account. */
+export type Http = {
+  /**
+   * Calls the portal and validates the response against `schema`.
+   * Handles login, session expiry, error mapping and drift detection.
+   */
+  json<T extends z.ZodType>(path: string, schema: T, options?: RequestOptions): Promise<z.infer<T>>;
+};
+
+/** What a tool handler receives. */
+export type ToolContext = RuntimeContext & { http: Http };
+
+/** A tool after defineTool: schemas are erased so connectors can hold a mixed list. */
 export type ToolDef = {
-  /** verb_noun, e.g. get_status. Registry prefixes it with the connector id. */
   name: string;
   description: string;
   inputSchema: JsonSchema;
+  outputSchema: JsonSchema;
   annotations: ToolAnnotations;
-  handler: (input: Record<string, unknown>, ctx: ToolContext) => Promise<unknown>;
+  /** Validates input, runs the handler, validates output. Throws UtilsError on failure. */
+  run(input: unknown, ctx: ToolContext): Promise<unknown>;
 };
 
 export type ConnectorStatus = "active" | "beta" | "broken" | "deprecated";
+
+export type AuthHelpers = {
+  connectorId: string;
+  account: string;
+  secrets: SecretReader;
+  /** Fetch that keeps cookies for this session. */
+  fetch: typeof fetch;
+  cookie(name: string): string | undefined;
+  /** Joins the connector's baseUrl and a path. */
+  url(path: string): string;
+};
+
+export type AuthStrategy = {
+  method: AuthMethod;
+  /** Establish a session. Called before the first request and after a 401. */
+  login?(helpers: AuthHelpers): Promise<void>;
+  /** Extra headers for every request. */
+  headers?(helpers: AuthHelpers, request: { method: string }): Record<string, string>;
+};
 
 export type Connector = {
   id: string;
   version: string;
   status: ConnectorStatus;
   description: string;
-  auth: AuthMethod[];
+  baseUrl: string;
+  auth: AuthStrategy;
   tools: ToolDef[];
 };

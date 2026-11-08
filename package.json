@@ -3,14 +3,20 @@
   "private": true,
   "type": "module",
   "packageManager": "bun@1.4.4",
-  "workspaces": ["packages/*", "connectors/*"],
+  "workspaces": [
+    "packages/*",
+    "connectors/*",
+    "tools/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "lint": "oxlint --deny-warnings .",
     "lint:fix": "oxlint --fix --deny-warnings .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "new:connector": "bun tools/scaffold/src/cli.ts new",
+    "check:connectors": "bun tools/scaffold/src/cli.ts check"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs}": "oxlint --fix --deny-warnings"

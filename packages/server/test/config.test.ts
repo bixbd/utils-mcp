@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { configPath, parseConfig } from "../src/config";
+import { configPath, DEFAULT_CONFIG, parseConfig } from "../src/config";
 
 describe("config", () => {
   test("parses enabled connectors", () => {
@@ -8,6 +8,10 @@ describe("config", () => {
 
   test("rejects a malformed config", () => {
     expect(() => parseConfig('{"enabled":"example"}')).toThrow("enabled");
+  });
+
+  test("nothing is enabled by default", () => {
+    expect(DEFAULT_CONFIG.enabled).toEqual([]);
   });
 
   test("UTILS_MCP_CONFIG overrides the default path", () => {

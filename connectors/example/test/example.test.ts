@@ -5,7 +5,11 @@ import status from "../fixtures/status.json";
 import { example } from "../src";
 
 const run = (fetchImpl: typeof fetch) =>
-  createRegistry([example]).callTool("example_get_status", {}, { account: "default", fetch: fetchImpl, secrets: { get: () => undefined } });
+  createRegistry([example]).callTool("example_get_status", {}, {
+    account: "default",
+    fetch: fetchImpl,
+    secrets: { get: () => undefined },
+  });
 
 describe("example connector", () => {
   test("conforms to the connector standard", () => {
