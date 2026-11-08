@@ -1,3 +1,5 @@
+import { urlOf } from "@bixbd/utils-mcp-core";
+
 export type FakeRequest = {
   method: string;
   /** Path after the base URL, including the query string. */
@@ -35,7 +37,7 @@ export function fakePortal(baseUrl: string, routes: Record<string, FakeHandler>)
   const calls: string[] = [];
 
   const fn = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const url = urlOf(input);
     if (!url.startsWith(base)) {
       throw new Error(`fakePortal: ${url} is outside ${base}`);
     }

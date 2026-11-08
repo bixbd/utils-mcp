@@ -1,3 +1,5 @@
+import { urlOf } from "@bixbd/utils-mcp-core";
+
 export type Fixture = {
   /** Exact URL or a substring of it. */
   match: string;
@@ -10,7 +12,7 @@ export type Fixture = {
 /** Offline fetch that serves saved responses. Throws on any unmatched request. */
 export function replayFetch(fixtures: Fixture[]): typeof fetch {
   const fn = async (input: RequestInfo | URL): Promise<Response> => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const url = urlOf(input);
     const fixture = fixtures.find((f) => url === f.match || url.includes(f.match));
     if (!fixture) {
       throw new Error(`replayFetch: no fixture for ${url}`);

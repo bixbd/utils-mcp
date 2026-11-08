@@ -9,3 +9,4 @@ export * from "./http";
 export * from "./tool";
 export * from "./connector";
 export * from "./registry";
+export * from "./request-url";
