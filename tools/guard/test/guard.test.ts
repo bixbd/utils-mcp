@@ -44,7 +44,7 @@ describe("scanForSecrets", () => {
   test("finds provider tokens and private keys", () => {
     expect(scan("src/a.ts", `const t = "${fake("ghp_", 36)}";`)[0]?.reason).toBe("GitHub token");
     expect(scan("src/a.ts", `key AKIA${"A".repeat(16)}`)[0]?.reason).toBe("AWS access key id");
-    expect(scan("src/a.ts", "-----BEGIN RSA PRIVATE KEY-----")[0]?.reason).toBe("private key block");
+    expect(scan("src/a.ts", "-----BEGIN RSA PRIVATE KEY-----")[0]?.reason).toBe("private key block"); // guard:allow-secret
     expect(scan("src/a.ts", `const k = "${fake("sk-ant-", 30)}";`)[0]?.reason).toBe("Anthropic API key");
   });
 
