@@ -8,45 +8,39 @@ Let your AI assistant use everyday utility portals for you. Ask in plain languag
 
 utils-mcp is a local [MCP](https://modelcontextprotocol.io) server. Each utility portal is a small **connector** that gives your AI a few clear tools. You turn on only the connectors you need.
 
-## Quick start (3 steps)
+## Quick start (2 steps)
 
-You need [Bun](https://bun.sh) 1.1 or newer and an MCP-capable app such as Claude Desktop or Claude Code.
+You need [Node.js](https://nodejs.org) 18 or newer (the normal installer is fine) and any AI app that supports MCP.
 
-**1. Install the server and the connectors you want**
-
-```bash
-mkdir -p ~/.utils-mcp && cd ~/.utils-mcp
-bun add @bixbd/utils-mcp@next @bixbd/utils-mcp-connector-desco@next
-```
-
-**2. Choose what is enabled**
+**1. Run the setup**
 
 ```bash
-echo '{ "enabled": ["desco"] }' > ~/.utils-mcp/config.json
+npx -y @bixbd/utils-mcp@next setup
 ```
 
-**3. Add it to your AI app** with your portal login. Use the full path, because most apps do not expand `~`.
+It asks for your portal login, finds your AI apps (Claude Desktop, Claude Code, Cursor, Windsurf, VS Code, Gemini CLI) and adds itself to them. Nothing else to install or edit.
 
-Claude Desktop (`claude_desktop_config.json`):
+**2. Restart your AI app** and ask: "What's my DESCO prepaid balance?"
+
+### Another AI app, or you prefer to do it by hand
+
+Any app that can run an MCP server works. Add this to its MCP settings (the format is the same everywhere):
 
 ```json
 {
   "mcpServers": {
     "utils": {
-      "command": "/Users/you/.utils-mcp/node_modules/.bin/utils-mcp",
+      "command": "npx",
+      "args": ["-y", "@bixbd/utils-mcp@next"],
       "env": { "DESCO_USERNAME": "your-username", "DESCO_PASSWORD": "your-password" }
     }
   }
 }
 ```
 
-Claude Code:
+Claude Code: `claude mcp add utils -e DESCO_USERNAME=your-username -e DESCO_PASSWORD=your-password -- npx -y @bixbd/utils-mcp@next`
 
-```bash
-claude mcp add utils -e DESCO_USERNAME=your-username -e DESCO_PASSWORD=your-password -- ~/.utils-mcp/node_modules/.bin/utils-mcp
-```
-
-Restart the app and ask your question. More detail, including several accounts per portal and troubleshooting, is in the [server guide](packages/server/README.md).
+Several accounts per portal, choosing connectors, and troubleshooting are in the [server guide](packages/server/README.md).
 
 ## Available connectors
 

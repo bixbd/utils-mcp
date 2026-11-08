@@ -1,6 +1,14 @@
 import type { Connector } from "@bixbd/utils-mcp-core";
 
+import { bundled } from "./bundled";
+
 export type Importer = (specifier: string) => Promise<unknown>;
+
+// Connectors shipped inside this package load without any extra install step.
+const defaultImporter: Importer = (specifier) => {
+  const load = bundled[specifier];
+  return load ? load() : import(specifier);
+};
 
 const ID = /^[a-z][a-z0-9-]*$/;
 
@@ -26,7 +34,7 @@ function isConnector(value: unknown): value is Connector {
  */
 export async function loadConnectors(
   ids: string[],
-  importer: Importer = (specifier) => import(specifier),
+  importer: Importer = defaultImporter,
 ): Promise<Connector[]> {
   return Promise.all(
     ids.map(async (id) => {
@@ -39,7 +47,7 @@ export async function loadConnectors(
       try {
         mod = await importer(specifier);
       } catch {
-        throw new Error(`Connector "${id}" is enabled but ${specifier} could not be loaded. Install it with: bun add ${specifier}`);
+        throw new Error(`Connector "${id}" is enabled but ${specifier} could not be loaded. Install it with: npm install ${specifier}`);
       }
       const connector = (mod as { default?: unknown }).default;
       if (!isConnector(connector)) {

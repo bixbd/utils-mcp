@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
@@ -18,9 +19,14 @@ export function parseConfig(raw: string): Config {
 }
 
 export async function loadConfig(path = configPath()): Promise<Config> {
-  const file = Bun.file(path);
-  if (!(await file.exists())) {
-    return DEFAULT_CONFIG;
+  let raw: string;
+  try {
+    raw = await readFile(path, "utf8");
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return DEFAULT_CONFIG;
+    }
+    throw error;
   }
-  return parseConfig(await file.text());
+  return parseConfig(raw);
 }
