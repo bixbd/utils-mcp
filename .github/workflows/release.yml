@@ -43,4 +43,8 @@ jobs:
       - name: GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes ${{ contains(github.ref_name, '-') && '--prerelease' || '' }}
+        run: |
+          # The packages are already published at this point. A release made by hand
+          # in the GitHub UI for the same tag is fine, so do not fail the run over it.
+          gh release create "$GITHUB_REF_NAME" --generate-notes ${{ contains(github.ref_name, '-') && '--prerelease' || '' }} \
+            || echo "Release for $GITHUB_REF_NAME already exists, leaving it as is."
