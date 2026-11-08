@@ -37,9 +37,7 @@ jobs:
           DIST_TAG=$(bun tools/release/src/cli.ts dist-tag "$GITHUB_REF_NAME")
           mkdir -p "$RUNNER_TEMP/packs"
           for dir in $(bun tools/release/src/cli.ts order "$GITHUB_REF_NAME"); do
-            (cd "$dir" && bun pm pack --destination "$RUNNER_TEMP/packs" --quiet)
-          done
-          for tgz in "$RUNNER_TEMP"/packs/*.tgz; do
+            tgz=$(cd "$dir" && bun pm pack --destination "$RUNNER_TEMP/packs" --quiet | tail -n 1)
             npm publish "$tgz" --access public --tag "$DIST_TAG"
           done
       - name: GitHub release
