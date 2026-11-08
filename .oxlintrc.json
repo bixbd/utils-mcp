@@ -40,6 +40,7 @@
     "yoda": "error",
     "max-depth": ["error", 4],
     "max-params": ["error", 4],
+    "max-lines": ["error", { "max": 250, "skipBlankLines": false, "skipComments": false }],
     "complexity": ["error", 20],
     "typescript/no-explicit-any": "error",
     "typescript/no-non-null-assertion": "error",
