@@ -1,6 +1,7 @@
 {
   "name": "@bixbd/utils-mcp-testkit",
   "version": "0.0.0",
+  "private": true,
   "description": "Test kit for utils-mcp connectors: conformance checks, fakePortal and replayFetch.",
   "keywords": [
     "mcp",
@@ -29,9 +30,6 @@
   ],
   "engines": {
     "bun": ">=1.1.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "scripts": {
     "build": "echo \"testkit: no build step\"",

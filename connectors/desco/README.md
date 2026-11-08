@@ -1,6 +1,6 @@
-# @bixbd/utils-mcp-connector-desco
+# desco connector
 
-> Beta. A connector for [@bixbd/utils-mcp](https://www.npmjs.com/package/@bixbd/utils-mcp).
+> Beta. Built into [@bixbd/utils-mcp](https://www.npmjs.com/package/@bixbd/utils-mcp). It is not published as its own package.
 
 Unofficial connector for the DESCO prepaid electricity portal (https://prepaid.desco.org.bd/).
 Follows the flow documented in [KhBayazidAhmed/desco-prepaid-api](https://github.com/KhBayazidAhmed/desco-prepaid-api).
@@ -46,15 +46,7 @@ To add a tool, put it in the matching `tools/` file (or a new one) and register 
 
 ## Install
 
-Install it in the same folder as the server, then enable it:
-
-```bash
-cd ~/.utils-mcp
-bun add @bixbd/utils-mcp@next @bixbd/utils-mcp-connector-desco@next
-echo '{ "enabled": ["desco"] }' > config.json
-```
-
-Then add the server to your AI app. See the [server README](https://www.npmjs.com/package/@bixbd/utils-mcp) for the Claude Desktop and Claude Code setup.
+Nothing extra to install. The connector ships inside `@bixbd/utils-mcp` and turns on when `DESCO_USERNAME` and `DESCO_PASSWORD` are set. See the [server README](https://www.npmjs.com/package/@bixbd/utils-mcp) for the Claude Desktop and Claude Code setup.
 
 ## Credentials
 

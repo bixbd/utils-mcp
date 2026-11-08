@@ -1,6 +1,7 @@
 {
   "name": "@bixbd/utils-mcp-connector-desco",
   "version": "0.0.0",
+  "private": true,
   "description": "utils-mcp connector for the DESCO prepaid electricity portal (Bangladesh): accounts and balance. Unofficial.",
   "keywords": [
     "mcp",
@@ -31,9 +32,6 @@
   ],
   "engines": {
     "bun": ">=1.1.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "scripts": {
     "build": "echo \"desco: no build step\"",

@@ -1,7 +1,7 @@
 import type { AuthStrategy, Connector, ConnectorStatus, ToolDef } from "./types";
 
 export type ConnectorSpec = {
-  /** Lowercase kebab-case. Also the tool name prefix and the npm package suffix. */
+  /** Lowercase kebab-case. Also the tool name prefix. */
   id: string;
   version: string;
   status: ConnectorStatus;

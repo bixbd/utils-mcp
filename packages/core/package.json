@@ -1,6 +1,7 @@
 {
   "name": "@bixbd/utils-mcp-core",
   "version": "0.0.0",
+  "private": true,
   "description": "Core of utils-mcp: defineConnector and defineTool, auth strategies, HTTP client and registry for MCP connectors.",
   "keywords": [
     "mcp",
@@ -30,9 +31,6 @@
   ],
   "engines": {
     "bun": ">=1.1.0"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "scripts": {
     "build": "echo \"core: no build step\"",
