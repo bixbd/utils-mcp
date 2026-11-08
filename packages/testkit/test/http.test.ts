@@ -181,17 +181,17 @@ describe("formLogin", () => {
   });
 
   test("adds the CSRF header to non-GET requests only", async () => {
-    let csrf: string | null = null;
+    const seen: { csrf: string | null } = { csrf: null };
     const portal = fakePortal(BASE, {
       "GET /auth/csrf": () => ({ cookies: ["XSRF-TOKEN=tok%3D%3D; Path=/"] }),
       "POST /auth/login": () => ({ cookies: ["SESSION=abc; Path=/"] }),
       "POST /act": (req) => {
-        csrf = req.headers.get("x-xsrf-token");
+        seen.csrf = req.headers.get("x-xsrf-token");
         return { body: { pong: true } };
       },
     });
     await httpFor(auth, runtimeFor(portal.fetch, secrets)).json("/act", Pong, { method: "POST", body: {} });
-    expect(csrf).toBe("tok==");
+    expect(seen.csrf).toBe("tok==");
   });
 
   test("re-logs in exactly once when the session expires", async () => {
