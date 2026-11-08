@@ -19,7 +19,9 @@ You enable the connectors you want. Each connector adds a few task-shaped tools 
 
 ## Install
 
-Run the setup. It asks for your portal login, finds your AI apps and configures them:
+**Claude Desktop, no terminal:** download `utils-mcp.mcpb` from the [latest release](https://github.com/bixbd/utils-mcp/releases), double-click it and enter your login. Claude Desktop keeps the password in the OS keychain. (Build it yourself with `bun run pack:mcpb`.)
+
+**Any app:** run the setup. It asks for your portal login, finds your AI apps and configures them:
 
 ```bash
 npx -y @bixbd/utils-mcp@next setup

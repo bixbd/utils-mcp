@@ -1,0 +1,46 @@
+{
+  "manifest_version": "0.3",
+  "name": "utils-mcp",
+  "display_name": "Utils MCP (DESCO)",
+  "version": "0.0.0",
+  "description": "Ask your AI about your DESCO prepaid electricity balance. Runs on your computer; your login stays here.",
+  "long_description": "Connects the DESCO prepaid electricity portal (Bangladesh) to Claude. Ask for your linked accounts, your current balance, or the realtime reading status. The extension runs on your own computer and sends your login only to the DESCO portal over HTTPS. Unofficial and not affiliated with DESCO.",
+  "author": { "name": "BIXBD", "url": "https://github.com/bixbd" },
+  "homepage": "https://github.com/bixbd/utils-mcp",
+  "repository": { "type": "git", "url": "https://github.com/bixbd/utils-mcp" },
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.js"],
+      "env": {
+        "UTILS_MCP_ENABLED": "desco",
+        "DESCO_USERNAME": "${user_config.desco_username}",
+        "DESCO_PASSWORD": "${user_config.desco_password}"
+      }
+    }
+  },
+  "user_config": {
+    "desco_username": {
+      "type": "string",
+      "title": "DESCO username",
+      "description": "The username you use to sign in to the DESCO prepaid portal.",
+      "required": true
+    },
+    "desco_password": {
+      "type": "string",
+      "title": "DESCO password",
+      "description": "Stored in your computer's secure keychain, never in a plain file.",
+      "sensitive": true,
+      "required": true
+    }
+  },
+  "tools": [
+    { "name": "desco_list_accounts", "description": "List your linked DESCO prepaid accounts" },
+    { "name": "desco_get_balance", "description": "Get the prepaid balance for an account" },
+    { "name": "desco_get_realtime_status", "description": "Check the realtime reading status" }
+  ],
+  "compatibility": { "runtimes": { "node": ">=18.0.0" } }
+}

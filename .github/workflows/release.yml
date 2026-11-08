@@ -48,3 +48,9 @@ jobs:
           # in the GitHub UI for the same tag is fine, so do not fail the run over it.
           gh release create "$GITHUB_REF_NAME" --generate-notes ${{ contains(github.ref_name, '-') && '--prerelease' || '' }} \
             || echo "Release for $GITHUB_REF_NAME already exists, leaving it as is."
+      - name: Attach the Claude Desktop extension
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bun packages/server/scripts/pack-mcpb.ts "$GITHUB_REF_NAME"
+          gh release upload "$GITHUB_REF_NAME" packages/server/dist/utils-mcp.mcpb --clobber

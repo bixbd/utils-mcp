@@ -8,9 +8,11 @@ Let your AI assistant use everyday utility portals for you. Ask in plain languag
 
 utils-mcp is a local [MCP](https://modelcontextprotocol.io) server. Each utility portal is a small **connector** that gives your AI a few clear tools. You turn on only the connectors you need.
 
-## Quick start (2 steps)
+## Quick start
 
-You need [Node.js](https://nodejs.org) 18 or newer (the normal installer is fine) and any AI app that supports MCP.
+**Claude Desktop, no terminal:** download `utils-mcp.mcpb` from the [latest release](https://github.com/bixbd/utils-mcp/releases), double-click it, click **Install**, and enter your DESCO login in the form. Your password is kept in your computer's secure keychain. Then ask: "What's my DESCO prepaid balance?"
+
+**Any other AI app (2 steps):** you need [Node.js](https://nodejs.org) 18 or newer (the normal installer is fine) and any AI app that supports MCP.
 
 **1. Run the setup**
 
