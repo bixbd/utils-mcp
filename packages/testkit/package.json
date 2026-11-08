@@ -1,0 +1,13 @@
+{
+  "name": "@bixbd/utils-mcp-testkit",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "echo \"testkit: no build step\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": { "@bixbd/utils-mcp-core": "workspace:*" }
+}

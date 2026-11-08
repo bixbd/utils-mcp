@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import"],
+  "categories": { "correctness": "error", "suspicious": "warn" },
+  "rules": {
+    "no-console": "error",
+    "no-unused-vars": "warn"
+  },
+  "ignorePatterns": ["**/dist/**", "**/node_modules/**", ".turbo/**"],
+  "overrides": [
+    { "files": ["**/test/**", "**/*.test.ts"], "rules": { "no-console": "off" } }
+  ]
+}
