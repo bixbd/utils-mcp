@@ -1,6 +1,6 @@
 # Adding a connector
 
-A connector is a small package that describes one portal: where it lives, how to sign in, and a few task-shaped tools. The core handles login, sessions, retries, error mapping and validation, so keep connectors thin. About an hour of work is typical.
+A connector is a small folder in `connectors/` that describes one portal: where it lives, how to sign in, and a few task-shaped tools. The core handles login, sessions, retries, error mapping and validation, so keep connectors thin. About an hour of work is typical.
 
 ## Before you start
 
@@ -8,7 +8,7 @@ A connector is a small package that describes one portal: where it lives, how to
 - You need an account on the portal and permission to use it. Do not build connectors for accounts you don't own or for services that forbid automation.
 - Work out the portal's flow with your browser's network tab: the login request, what cookies or tokens it sets, and the requests behind the pages you care about.
 
-## 1. Generate the package
+## 1. Generate the connector
 
 ```bash
 bun install
@@ -16,7 +16,7 @@ bun run new:connector acme-portal
 bun install
 ```
 
-The id is lowercase kebab-case. This creates `connectors/acme-portal` with source, tests and a README. The server loads it later as `@bixbd/utils-mcp-connector-acme-portal`, so nothing in the server changes.
+The id is lowercase kebab-case. This creates `connectors/acme-portal` with source, tests and a README. Connectors are not published on their own. Once it is merged, a maintainer adds it to the server's built-in list (`packages/server/src/bundled.ts`) and its dependencies, so users get it from the one `@bixbd/utils-mcp` package.
 
 ## 2. Describe the portal and sign-in
 
@@ -71,7 +71,7 @@ bun run check
 
 ## 6. Open a pull request
 
-Follow [CONTRIBUTING.md](../CONTRIBUTING.md): a branch, [Conventional Commits](https://www.conventionalcommits.org) such as `feat(acme-portal): add balance tool`, and the PR template. CI runs the same checks as your machine. Maintainers publish new connectors to npm in the next release.
+Follow [CONTRIBUTING.md](../CONTRIBUTING.md): a branch, [Conventional Commits](https://www.conventionalcommits.org) such as `feat(acme-portal): add balance tool`, and the PR template. CI runs the same checks as your machine. Maintainers bundle new connectors into `@bixbd/utils-mcp` in the next release.
 
 ## The standard
 

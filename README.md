@@ -70,12 +70,14 @@ Help is welcome, from a bug report to a whole new connector.
 ## Repo layout
 
 ```
-packages/core       defineConnector/defineTool, auth strategies, HTTP client, registry
-packages/testkit    Conformance checks, fakePortal, replayFetch
-packages/server     The MCP server and CLI (npm: @bixbd/utils-mcp)
-connectors/*        One package per portal (npm: @bixbd/utils-mcp-connector-<id>)
+packages/server     The MCP server and CLI. The only npm package: @bixbd/utils-mcp
+packages/core       defineConnector/defineTool, auth strategies, HTTP client (bundled, not published)
+packages/testkit    Conformance checks, fakePortal, replayFetch (dev only)
+connectors/*        One folder per portal, bundled into the server (not published)
 tools/*             Generator, repo rules, commit and secret checks, release scripts
 docs/               Guides
 ```
+
+Everything ships as one npm package, `@bixbd/utils-mcp`. The other folders are workspaces used for development.
 
 MIT License. Built in the open by [BixBD](https://github.com/bixbd).

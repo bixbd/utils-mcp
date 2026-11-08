@@ -17,6 +17,4 @@ Versions with a dash (`v0.2.0-beta.1`) publish under the `next` dist-tag and nev
 
 ## What gets published
 
-Every non-private package under `packages/` and `connectors/`. The example connector and everything in `tools/` are private.
-
-Packages are published in dependency order: core, testkit, connectors, then the server.
+Only `@bixbd/utils-mcp` (the server). It bundles `core` and all connectors into one file, so those and `testkit` are private and never published. The example connector and everything in `tools/` are private too.

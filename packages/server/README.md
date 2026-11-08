@@ -10,7 +10,7 @@ You enable the connectors you want. Each connector adds a few task-shaped tools 
 
 | Connector | Tools | Credentials |
 | --- | --- | --- |
-| `desco` ([package](https://www.npmjs.com/package/@bixbd/utils-mcp-connector-desco)) | `desco_list_accounts`, `desco_get_balance`, `desco_get_realtime_status` | `DESCO_USERNAME`, `DESCO_PASSWORD` |
+| `desco` (built in) | `desco_list_accounts`, `desco_get_balance`, `desco_get_realtime_status` | `DESCO_USERNAME`, `DESCO_PASSWORD` |
 | `example` (repo only) | `example_get_status` | none |
 
 ## Requirements
@@ -61,7 +61,7 @@ By default every built-in connector is on, and only the ones with credentials wi
 { "enabled": ["desco"] }
 ```
 
-Connectors that are not built in are separate packages (`@bixbd/utils-mcp-connector-<id>`) that you install next to the server.
+Every connector in this repository is built into the server, so there is nothing else to install.
 
 ## Multiple accounts
 
@@ -78,7 +78,7 @@ Then ask "check the office DESCO account", and the AI calls the tool with `accou
 
 | Message | Fix |
 | --- | --- |
-| Cannot find the connector package | Only built-in connectors work out of the box. Install others with `npm install @bixbd/utils-mcp-connector-<id>@next` in the folder the server runs from. |
+| Cannot find the connector package | Check the connector id in `enabled` (for example `desco`). Only the connectors listed above exist. |
 | The app says the server failed to start | Install Node.js 18+, or put the full path to `npx` in the config. |
 | A tool says credentials are missing | Add the environment variables to your app's MCP config (the `env` block). |
 | The portal changed | The tool returns `UPSTREAM_CHANGED`. Open an issue with the tool name. |

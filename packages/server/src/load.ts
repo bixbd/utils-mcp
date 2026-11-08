@@ -29,8 +29,8 @@ function isConnector(value: unknown): value is Connector {
 }
 
 /**
- * Loads each enabled connector from its own package, so the server never
- * depends on connectors directly. Each package must default-export a connector.
+ * Loads each enabled connector. Connectors in this repository are bundled into
+ * the server; anything else is imported by package name. Each must default-export a connector.
  */
 export async function loadConnectors(
   ids: string[],

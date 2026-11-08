@@ -2,7 +2,7 @@
 
 The building blocks for [utils-mcp](https://github.com/bixbd/utils-mcp) connectors. Beta.
 
-You do not need this package to use utils-mcp. Install it only when writing a connector.
+Internal package. It is not published to npm; it is bundled into `@bixbd/utils-mcp`. Contributors use it through the workspace.
 
 ```ts
 import { defineConnector, defineTool, noAuth, z } from "@bixbd/utils-mcp-core";
