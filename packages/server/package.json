@@ -42,7 +42,8 @@
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "start": "node dist/cli.js",
-    "prepack": "bun run build"
+    "prepack": "bun run build",
+    "pack:mcpb": "bun scripts/pack-mcpb.ts"
   },
   "devDependencies": {
     "@bixbd/utils-mcp-connector-example": "workspace:*",
