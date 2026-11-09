@@ -13,6 +13,7 @@ const SERVICES: Service[] = [
     { env: "NESCO_METER_ID", label: "NESCO customer or meter number (8–11 digits)" },
   ] },
   { id: "rapidpass", name: "RapidPass smart card (Bangladesh transit)", fields: [
+    { env: "RAPIDPASS_COOKIES", label: "Cookie header from a logged-in browser (safest)", secret: true },
     { env: "RAPIDPASS_EMAIL", label: "RapidPass email or mobile number" },
     { env: "RAPIDPASS_PASSWORD", label: "RapidPass password", secret: true },
   ] },

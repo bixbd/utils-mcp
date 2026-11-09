@@ -18,6 +18,7 @@ export const rapidpass = defineConnector({
     pagePath: "/login",
     loginPath: "/login",
     secrets: { username: "RAPIDPASS_EMAIL", password: "RAPIDPASS_PASSWORD" }, // guard:allow-secret env var names, not values
+    cookieSecret: "RAPIDPASS_COOKIES", // when set, replaces the credential login entirely
     fields: { username: "email_or_mobile", password: "password" }, // guard:allow-secret env var names, not values
     hiddenFields: ["_token", "csSignature"],
   }),

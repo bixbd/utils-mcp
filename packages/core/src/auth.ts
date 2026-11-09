@@ -14,6 +14,11 @@ function requireSecret(helpers: AuthHelpers, name: string): string {
   return value;
 }
 
+function optionalSecret(helpers: AuthHelpers, name: string): string | undefined {
+  const value = helpers.secrets.get(name);
+  return value === undefined || value.trim().length === 0 ? undefined : value.trim();
+}
+
 export type HtmlFormLoginOptions = {
   /** GET this first to collect the hidden anti-CSRF fields. Defaults to the login path. */
   pagePath?: string;
@@ -23,29 +28,56 @@ export type HtmlFormLoginOptions = {
   fields?: { username: string; password: string };
   /** Hidden inputs collected from the login page and replayed in the POST body. */
   hiddenFields?: string[];
+  /**
+   * User-Agent for every request. Portals like Laravel encrypt cookies bound to
+   * the User-Agent, so a session started with one agent cannot be read by another.
+   */
+  userAgent?: string;
+  /** Cookie-secret that, when set, replaces the credential login entirely. */
+  cookieSecret?: string;
 };
 
-function hiddenInputValue(html: string, name: string): string | undefined {
-  const safe = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const withName = new RegExp(`<input[^>]*\\sname=["']${safe}["'][^>]*value=["']([^"']*)["']`, "i");
-  const withValue = new RegExp(`<input[^>]*\\svalue=["']([^"']*)["'][^>]*name=["']${safe}["']`, "i");
-  const forward = html.match(withName) ?? html.match(withValue);
-  return forward?.[1];
-}
+/** Ports commonly treat agent-less traffic with suspicion; stay browser-shaped by default. */
+export const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
-/** Classic HTML form login: GET the page, replay its hidden inputs, POST the credentials urlencoded. */
+/**
+ * Classic HTML form login: GET the page, replay its hidden inputs, POST the
+ * credentials urlencoded — with a browser-shaped User-Agent and Origin/Referer.
+ *
+ * Portals increasingly sit behind bot scoring (reCAPTCHA Enterprise and
+ * friends) that silently rejects bare POSTs. When `cookieSecret` is named and
+ * set, the strategy becomes cookie-import instead: the secret (a raw
+ * Cookie header copied from a logged-in browser) is sent on every request and
+ * no credentials are ever POSTed.
+ */
 export function htmlFormLogin(options: HtmlFormLoginOptions): AuthStrategy {
   const fields = { username: "email", password: "password", ...options.fields }; // guard:allow-secret env var names, not values
   const hiddenFields = options.hiddenFields ?? [];
+  const userAgent = options.userAgent ?? BROWSER_UA;
+  const cookieSecret = options.cookieSecret;
+
+  const cookieHeader = (helpers: AuthHelpers): Record<string, string> => {
+    const secret = cookieSecret === undefined ? undefined : optionalSecret(helpers, cookieSecret);
+    return secret ? { Cookie: secret } : {};
+  };
+
   return {
-    method: "form-login",
+    method: "cookie-import",
+    headers(helpers) {
+      return { "User-Agent": userAgent, ...cookieHeader(helpers) };
+    },
     async login(helpers) {
+      if (cookieSecret !== undefined && optionalSecret(helpers, cookieSecret) !== undefined) {
+        return; // session imported from the browser; nothing to log in.
+      }
       const username = requireSecret(helpers, options.secrets.username);
       const password = requireSecret(helpers, options.secrets.password);
       const id = helpers.connectorId;
       const page = options.pagePath ?? options.loginPath;
+      const loginUrl = helpers.url(page);
+      const origin = new URL(loginUrl).origin;
 
-      const response = await helpers.fetch(helpers.url(page), { headers: { Accept: "text/html" } });
+      const response = await helpers.fetch(loginUrl, { headers: { Accept: "text/html", "User-Agent": userAgent, ...cookieHeader(helpers) } });
       if (!response.ok) {
         throw new UtilsError("UPSTREAM_ERROR", `${id} returned HTTP ${response.status} for the login page`, "Try again later.");
       }
@@ -63,7 +95,7 @@ export function htmlFormLogin(options: HtmlFormLoginOptions): AuthStrategy {
 
       const posted = await helpers.fetch(helpers.url(options.loginPath), {
         method: "POST",
-        headers: { Accept: "text/html", "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { Accept: "text/html", "Content-Type": "application/x-www-form-urlencoded", "User-Agent": userAgent, Origin: origin, Referer: loginUrl, ...cookieHeader(helpers) },
         body: body.toString(),
       });
       if (posted.status === 401 || posted.status === 403) {
@@ -74,6 +106,14 @@ export function htmlFormLogin(options: HtmlFormLoginOptions): AuthStrategy {
       }
     },
   };
+}
+
+function hiddenInputValue(html: string, name: string): string | undefined {
+  const safe = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const withName = new RegExp(`<input[^>]*\\sname=["']${safe}["'][^>]*value=["']([^"']*)["']`, "i");
+  const withValue = new RegExp(`<input[^>]*\\svalue=["']([^"']*)["'][^>]*name=["']${safe}["']`, "i");
+  const forward = html.match(withName) ?? html.match(withValue);
+  return forward?.[1];
 }
 
 export const noAuth = (): AuthStrategy => ({ method: "none" });
@@ -146,11 +186,7 @@ export function formLogin(options: FormLoginOptions): AuthStrategy {
         body: JSON.stringify({ [fields.username]: username, [fields.password]: password }),
       });
       if (response.status === 401 || response.status === 403) {
-        throw new UtilsError(
-          "AUTH_REQUIRED",
-          `${id} rejected the username or password`,
-          "Fix the credentials and restart the server. A rejected login is never retried, so it can't lock the account.",
-        );
+        throw new UtilsError("AUTH_REQUIRED", `${id} rejected the username or password`, "Fix the credentials and restart the server. A rejected login is never retried, so it can't lock the account.");
       }
       if (!response.ok) {
         throw new UtilsError("UPSTREAM_ERROR", `${id} returned HTTP ${response.status} for login`, "Try again later.");

@@ -6,12 +6,29 @@ Use only accounts you own or have permission to access.
 
 ## Credentials
 
-| Secret | Meaning |
-|---|---|
-| `RAPIDPASS_EMAIL` | The email or mobile number of your rapidpass.com.bd account |
-| `RAPIDPASS_PASSWORD` | The account password |
+Two ways to authenticate, in order of preference:
+
+1. **Cookie import (recommended).** The login page sits behind reCAPTCHA
+   Enterprise, and its risk engine can silently reject scripted credential
+   logins. Copy the `Cookie` request header from a logged-in browser
+   (developer tools → network → any rapidpass.com.bd request) into:
+
+   | Secret | Meaning |
+   |---|---|
+   | `RAPIDPASS_COOKIES` | Raw cookie header, e.g. `XSRF-TOKEN=…; rapidpass_session=…` |
+
+   Sessions expire when the portal logs you out; refresh the secret then.
+
+2. **Credentials.** Works only when the portal's risk engine is benign:
+
+   | Secret | Meaning |
+   |---|---|
+   | `RAPIDPASS_EMAIL` | The email or mobile number of your rapidpass.com.bd account |
+   | `RAPIDPASS_PASSWORD` | The account password |
 
 Optional `"user"` account suffixes work as with every other connector.
+Requests carry a browser-shaped User-Agent either way; Laravel sessions are
+bound to the agent, and `htmlFormLogin` sends Origin/Referer on the POST.
 
 ## Tools
 
