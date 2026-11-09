@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import { createHttp, createRegistry, envSecrets } from "@bixbd/utils-mcp-core";
 import { rapidpass } from "../src";
 import { isEmailGate, isLoginPage, parseTravelHistory } from "../src/client";
+import { fromBengaliDigits, sanitize } from "../src/text";
 
 const loginPage = `<html><body><form method="post" action="/login">
   <input type="hidden" name="csSignature" value="synthetic-signature">
@@ -125,6 +126,11 @@ test("a payload without card_number is drift", () => {
   expect(parseTravelHistory(compactTravelHtml)).toEqual([{
     cardNumber: "RP32A****4853", serverStatus: null, syncStatus: null, balanceBdt: null, lastUpdatedAt: null, operations: [],
   }]);
+});
+
+test("Bengali numerals normalize before masking", () => {
+  expect(fromBengaliDigits("৳ ১০৫.০০")).toBe("৳ 105.00");
+  expect(sanitize("balance ১২৩৪৫৬৭৮৯01 kept")).toBe("balance ****8901 kept");
 });
 
 test("recharge transaction table parses rows and masks identifiers", async () => {
