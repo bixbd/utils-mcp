@@ -1,0 +1,19 @@
+{
+  "name": "@bixbd/utils-mcp-connector-rapidpass",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "echo \"rapidpass: no build step\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@bixbd/utils-mcp-core": "workspace:*",
+    "cheerio": "1.0.0"
+  },
+  "devDependencies": {
+    "@bixbd/utils-mcp-testkit": "workspace:*"
+  },
+  "private": true
+}

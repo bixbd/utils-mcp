@@ -50,6 +50,12 @@ export function fakePortal(baseUrl: string, routes: Record<string, FakeHandler>)
       throw new Error(`fakePortal: no route for ${key}`);
     }
     const headers = new Headers(init?.headers);
+    let parsedBody: unknown;
+    if (typeof init?.body === "string") {
+      parsedBody = (headers.get("content-type") ?? "").includes("x-www-form-urlencoded")
+        ? Object.fromEntries(new URLSearchParams(init.body))
+        : JSON.parse(init.body);
+    }
     const cookies = new Map(
       (headers.get("cookie") ?? "")
         .split(";")
@@ -61,15 +67,18 @@ export function fakePortal(baseUrl: string, routes: Record<string, FakeHandler>)
       method,
       path,
       headers,
-      body: typeof init?.body === "string" ? JSON.parse(init.body) : undefined,
+      body: parsedBody,
       cookie: (name) => cookies.get(name),
     };
     const reply = await handler(request);
-    const responseHeaders = new Headers({ "content-type": "application/json" });
+    const isPlainBody = typeof reply.body === "string";
+    const responseHeaders = new Headers({ "content-type": isPlainBody ? "text/html" : "application/json" });
     for (const cookie of reply.cookies ?? []) {
       responseHeaders.append("set-cookie", cookie);
     }
-    return new Response(JSON.stringify(reply.body ?? {}), { status: reply.status ?? 200, headers: responseHeaders });
+    const payload = reply.body ?? {};
+    const body: BodyInit = isPlainBody ? (payload as BodyInit) : JSON.stringify(payload);
+    return new Response(body, { status: reply.status ?? 200, headers: responseHeaders });
   };
 
   return {

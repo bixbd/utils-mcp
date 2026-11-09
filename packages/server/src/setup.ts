@@ -12,6 +12,10 @@ const SERVICES: Service[] = [
   { id: "nesco", name: "NESCO prepaid electricity (Bangladesh)", fields: [
     { env: "NESCO_METER_ID", label: "NESCO customer or meter number (8–11 digits)" },
   ] },
+  { id: "rapidpass", name: "RapidPass smart card (Bangladesh transit)", fields: [
+    { env: "RAPIDPASS_EMAIL", label: "RapidPass email or mobile number" },
+    { env: "RAPIDPASS_PASSWORD", label: "RapidPass password", secret: true },
+  ] },
   {
     id: "desco",
     name: "DESCO prepaid electricity (Bangladesh)",

@@ -44,6 +44,17 @@
         "@bixbd/utils-mcp-testkit": "workspace:*",
       },
     },
+    "connectors/rapidpass": {
+      "name": "@bixbd/utils-mcp-connector-rapidpass",
+      "version": "0.0.0",
+      "dependencies": {
+        "@bixbd/utils-mcp-core": "workspace:*",
+        "cheerio": "1.0.0",
+      },
+      "devDependencies": {
+        "@bixbd/utils-mcp-testkit": "workspace:*",
+      },
+    },
     "packages/core": {
       "name": "@bixbd/utils-mcp-core",
       "version": "0.0.0",
@@ -61,6 +72,7 @@
         "@bixbd/utils-mcp-connector-desco": "workspace:*",
         "@bixbd/utils-mcp-connector-example": "workspace:*",
         "@bixbd/utils-mcp-connector-nesco": "workspace:*",
+        "@bixbd/utils-mcp-connector-rapidpass": "workspace:*",
         "@bixbd/utils-mcp-core": "workspace:*",
         "@modelcontextprotocol/sdk": "^1.0.0",
       },
@@ -93,6 +105,8 @@
     "@bixbd/utils-mcp-connector-example": ["@bixbd/utils-mcp-connector-example@workspace:connectors/example"],
 
     "@bixbd/utils-mcp-connector-nesco": ["@bixbd/utils-mcp-connector-nesco@workspace:connectors/nesco"],
+
+    "@bixbd/utils-mcp-connector-rapidpass": ["@bixbd/utils-mcp-connector-rapidpass@workspace:connectors/rapidpass"],
 
     "@bixbd/utils-mcp-core": ["@bixbd/utils-mcp-core@workspace:packages/core"],
 

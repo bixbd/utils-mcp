@@ -71,6 +71,18 @@
       "description": "Get the prepaid balance and meter state for an authorized meter (beta)"
     },
     {
+      "name": "rapidpass_get_cards",
+      "description": "List your registered RapidPass smart cards with balances (beta)"
+    },
+    {
+      "name": "rapidpass_get_travel_history",
+      "description": "RapidPass per-card travel history as uploaded by transport operators (beta)"
+    },
+    {
+      "name": "rapidpass_get_recharge_transactions",
+      "description": "RapidPass online top-up payment transactions (beta)"
+    },
+    {
       "name": "nesco_get_recharge_history",
       "description": "NESCO prepaid get recharge history (beta)"
     },
