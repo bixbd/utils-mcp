@@ -9,6 +9,9 @@ type Field = { env: string; label: string; secret?: boolean };
 type Service = { id: string; name: string; fields: Field[] };
 
 const SERVICES: Service[] = [
+  { id: "nesco", name: "NESCO prepaid electricity (Bangladesh)", fields: [
+    { env: "NESCO_METER_ID", label: "NESCO customer or meter number (8–11 digits)" },
+  ] },
   {
     id: "desco",
     name: "DESCO prepaid electricity (Bangladesh)",

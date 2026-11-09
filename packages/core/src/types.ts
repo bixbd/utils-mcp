@@ -26,10 +26,12 @@ export type RuntimeContext = {
   secrets: SecretReader;
 };
 
-export type RequestOptions = { method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; body?: unknown };
+export type RequestOptions = { method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; body?: unknown; form?: Record<string, string> };
 
 /** Authenticated, session-aware client for one connector and account. */
 export type Http = {
+  /** Read HTML using the same session and error handling as JSON requests. */
+  text(path: string, options?: RequestOptions): Promise<string>;
   /**
    * Calls the portal and validates the response against `schema`.
    * Handles login, session expiry, error mapping and drift detection.

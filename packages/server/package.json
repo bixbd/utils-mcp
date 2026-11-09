@@ -49,6 +49,7 @@
     "@bixbd/utils-mcp-connector-example": "workspace:*",
     "@bixbd/utils-mcp-connector-desco": "workspace:*",
     "@bixbd/utils-mcp-core": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@bixbd/utils-mcp-connector-nesco": "workspace:*"
   }
 }
