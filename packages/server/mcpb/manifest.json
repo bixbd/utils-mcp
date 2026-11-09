@@ -1,24 +1,33 @@
 {
   "manifest_version": "0.3",
   "name": "utils-mcp",
-  "display_name": "Utils MCP (DESCO)",
+  "display_name": "Utils MCP (DESCO & NESCO)",
   "version": "0.0.0",
-  "description": "Ask your AI about your DESCO prepaid electricity balance. Runs on your computer; your login stays here.",
-  "long_description": "Connects the DESCO prepaid electricity portal (Bangladesh) to Claude. Ask for your linked accounts, your current balance, or the realtime reading status. The extension runs on your own computer and sends your login only to the DESCO portal over HTTPS. Unofficial and not affiliated with DESCO.",
-  "author": { "name": "BIXBD", "url": "https://github.com/bixbd" },
+  "description": "Read DESCO prepaid accounts and NESCO recharge history and monthly usage.",
+  "long_description": "Connects the DESCO prepaid electricity portal (Bangladesh) to Claude. Ask for your linked accounts, your current balance, or the realtime reading status. The extension runs on your own computer and sends your login only to the DESCO portal over HTTPS. Unofficial and not affiliated with DESCO. NESCO prepaid history is also available in beta using an authorized customer or meter number; successful account responses are unverified.",
+  "author": {
+    "name": "BIXBD",
+    "url": "https://github.com/bixbd"
+  },
   "homepage": "https://github.com/bixbd/utils-mcp",
-  "repository": { "type": "git", "url": "https://github.com/bixbd/utils-mcp" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bixbd/utils-mcp"
+  },
   "license": "MIT",
   "server": {
     "type": "node",
     "entry_point": "server/index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/server/index.js"],
+      "args": [
+        "${__dirname}/server/index.js"
+      ],
       "env": {
-        "UTILS_MCP_ENABLED": "desco",
+        "UTILS_MCP_ENABLED": "desco,nesco",
         "DESCO_USERNAME": "${user_config.desco_username}",
-        "DESCO_PASSWORD": "${user_config.desco_password}"
+        "DESCO_PASSWORD": "${user_config.desco_password}",
+        "NESCO_METER_ID": "${user_config.nesco_meter_id}"
       }
     }
   },
@@ -27,20 +36,64 @@
       "type": "string",
       "title": "DESCO username",
       "description": "The username you use to sign in to the DESCO prepaid portal.",
-      "required": true
+      "required": false
     },
     "desco_password": {
       "type": "string",
       "title": "DESCO password",
       "description": "Stored in your computer's secure keychain, never in a plain file.",
       "sensitive": true,
-      "required": true
+      "required": false
+    },
+    "nesco_meter_id": {
+      "type": "string",
+      "title": "NESCO customer or meter number",
+      "description": "Optional authorized 8\u201311 digit number. NESCO support is beta.",
+      "required": false,
+      "sensitive": true
     }
   },
   "tools": [
-    { "name": "desco_list_accounts", "description": "List your linked DESCO prepaid accounts" },
-    { "name": "desco_get_balance", "description": "Get the prepaid balance for an account" },
-    { "name": "desco_get_realtime_status", "description": "Check the realtime reading status" }
+    {
+      "name": "desco_list_accounts",
+      "description": "List your linked DESCO prepaid accounts"
+    },
+    {
+      "name": "desco_get_balance",
+      "description": "Get the prepaid balance for an account"
+    },
+    {
+      "name": "desco_get_realtime_status",
+      "description": "Check the realtime reading status"
+    },
+    {
+      "name": "nesco_get_meter_status",
+      "description": "Get the prepaid balance and meter state for an authorized meter (beta)"
+    },
+    {
+      "name": "rapidpass_get_cards",
+      "description": "List your registered RapidPass smart cards with balances (beta)"
+    },
+    {
+      "name": "rapidpass_get_travel_history",
+      "description": "RapidPass per-card travel history as uploaded by transport operators (beta)"
+    },
+    {
+      "name": "rapidpass_get_recharge_transactions",
+      "description": "RapidPass online top-up payment transactions (beta)"
+    },
+    {
+      "name": "nesco_get_recharge_history",
+      "description": "NESCO prepaid get recharge history (beta)"
+    },
+    {
+      "name": "nesco_get_monthly_usage",
+      "description": "NESCO prepaid get monthly usage (beta)"
+    }
   ],
-  "compatibility": { "runtimes": { "node": ">=18.0.0" } }
+  "compatibility": {
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
 }

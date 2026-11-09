@@ -38,23 +38,30 @@ export function createHttp(
     url: (path) => `${baseUrl}${path}`,
   };
 
-  async function send(path: string, options: RequestOptions, retried: boolean): Promise<unknown> {
+  async function send(path: string, options: RequestOptions, retried: boolean, text = false): Promise<unknown> {
     if (!session.loggedIn && auth.login) {
       await auth.login(helpers);
       session.loggedIn = true;
     }
     const method = options.method ?? "GET";
     const headers: Record<string, string> = {
-      Accept: "application/json",
+      Accept: text ? "text/html" : "application/json",
       ...auth.headers?.(helpers, { method }),
     };
     if (options.body !== undefined) {
       headers["Content-Type"] = "application/json";
     }
+    if (options.form !== undefined) {
+      headers["Content-Type"] = "application/x-www-form-urlencoded";
+    }
+    let body = options.body === undefined ? null : JSON.stringify(options.body);
+    if (options.form !== undefined) {
+      body = new URLSearchParams(options.form).toString();
+    }
     const response = await helpers.fetch(helpers.url(path), {
       method,
       headers,
-      body: options.body === undefined ? null : JSON.stringify(options.body),
+      body,
     });
 
     if (response.status === 401) {
@@ -70,10 +77,13 @@ export function createHttp(
           "Check the credentials, or sign in on the portal to see if the account needs attention.",
         );
       }
-      return send(path, options, true);
+      return send(path, options, true, text);
     }
     if (!response.ok) {
       throw new UtilsError("UPSTREAM_ERROR", `${id} returned HTTP ${response.status}`, "Try again later.");
+    }
+    if (text) {
+      return response.text();
     }
     try {
       return await response.json();
@@ -83,6 +93,9 @@ export function createHttp(
   }
 
   return {
+    async text(path, options = {}) {
+      return await send(path, options, false, true) as string;
+    },
     async json<T extends z.ZodType>(path: string, schema: T, options: RequestOptions = {}) {
       const raw = await send(path, options, false);
       const parsed = schema.safeParse(raw);

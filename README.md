@@ -81,3 +81,6 @@ docs/               Guides
 Everything ships as one npm package, `@bixbd/utils-mcp`. The other folders are workspaces used for development.
 
 MIT License. Built in the open by [BixBD](https://github.com/bixbd).
+
+NESCO prepaid (beta): set `NESCO_METER_ID` to an authorized 8–11 digit meter or customer number. Tools: `nesco_get_meter_status`, `nesco_get_recharge_history`, `nesco_get_monthly_usage`. Successful account responses remain unverified; see [connector documentation](https://github.com/bixbd/utils-mcp/tree/main/connectors/nesco).
+RapidPass smart card (beta): set `RAPIDPASS_EMAIL` and `RAPIDPASS_PASSWORD` to your rapidpass.com.bd account. Tools: `rapidpass_get_cards`, `rapidpass_get_travel_history`, `rapidpass_get_recharge_transactions` (this one needs a verified email); see [connector documentation](https://github.com/bixbd/utils-mcp/tree/main/connectors/rapidpass).

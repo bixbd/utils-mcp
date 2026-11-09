@@ -15,7 +15,7 @@ describe("toJsonSchema", () => {
 });
 
 describe("defineTool", () => {
-  const ctx = { account: "default", fetch, secrets: { get: () => undefined }, http: { json: async () => ({}) as never } };
+  const ctx = { account: "default", fetch, secrets: { get: () => undefined }, http: { text: async () => "", json: async () => ({}) as never } };
   const tool = defineTool({
     name: "double_number",
     description: "Doubles a number. Use when asked to double something.",
