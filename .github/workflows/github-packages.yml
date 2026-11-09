@@ -1,0 +1,47 @@
+name: Mirror npm packages to GitHub Packages
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: github-packages
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Download published npm releases
+        run: |
+          set -euo pipefail
+          for tag in latest next; do
+            mkdir -p "packs/$tag"
+            npm pack "@bixbd/utils-mcp@$tag" --registry=https://registry.npmjs.org --ignore-scripts --pack-destination "packs/$tag"
+          done
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: "@bixbd"
+      - name: Publish existing releases to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for tag in latest next; do
+            tgz=$(find "packs/$tag" -name '*.tgz' -print -quit)
+            version=$(tar -xOf "$tgz" package/package.json | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+            if npm view "@bixbd/utils-mcp@$version" version --registry=https://npm.pkg.github.com; then
+              npm dist-tag add "@bixbd/utils-mcp@$version" "$tag" --registry=https://npm.pkg.github.com
+            else
+              npm publish "$tgz" --tag "$tag" --registry=https://npm.pkg.github.com --ignore-scripts
+            fi
+          done
